@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heinz Ketchup Empire - Przewodnik Instalacji</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a0e0e 0%, #2d1414 50%, #1a0e0e 100%);
+            color: white;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+        }
+        h1 {
+            color: #E4002B;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(228, 0, 43, 0.5);
+        }
+        h2 {
+            color: #FF6B6B;
+            border-bottom: 2px solid #E4002B;
+            padding-bottom: 10px;
+        }
+        .file-structure {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        .step {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #E4002B;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .download-button {
+            background: linear-gradient(45deg, #E4002B, #FF6B6B);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .download-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(228, 0, 43, 0.5);
+        }
+        .skin-preview {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .skin-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .skin-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .classic { background: linear-gradient(45deg, #E4002B, #CC0026); }
+        .golden { background: linear-gradient(45deg, #FFD700, #FFA500); }
+        .halloween { background: linear-gradient(45deg, #FF4500, #000000); }
+        .futuristic { background: linear-gradient(45deg, #C0C0C0, #4169E1); }
+        .rainbow { background: linear-gradient(45deg, #ff0000, #ff8c00, #ffd700, #00ff00, #0000ff, #8b00ff); }
+        .warning {
+            background: rgba(255, 165, 0, 0.2);
+            border: 2px solid #FFA500;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 2px solid #00FF00;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍅 Heinz Ketchup Empire<br>Przewodnik Instalacji</h1>
+        
+        <div class="success">
+            <strong>✅ Dobra wiadomość!</strong> Gra działa już teraz z placeholderami. Obrazy i dźwięki są opcjonalne, ale znacznie poprawią doświadczenie gry!
+        </div>
+
+        <h2>📁 Struktura Plików</h2>
+        <div class="file-structure">
+heinz_ketchup_empire.html  ← Główny plik gry
+skins/                     ← Folder na skórki butelki
+├── classic.png           ← Klasyczna czerwona butelka
+├── golden.png            ← Złota edycja
+├── halloween.png         ← Halloweenowa wersja
+├── futuristic.png        ← Futurystyczna
+└── rainbow.png           ← Tęczowa deluxe
+sounds/                   ← Folder na dźwięki
+├── squish.mp3           ← Dźwięk kliknięcia
+├── upgrade.mp3          ← Dźwięk ulepszenia
+├── victory.mp3          ← Dźwięk osiągnięcia
+└── rebirth.mp3          ← Dźwięk odrodzenia
+        </div>
+
+        <h2>🎨 Skórki Butelki - Wzorce Kolorów</h2>
+        <p>Jeśli nie masz własnych obrazów, możesz stworzyć proste kolorowe butelki na podstawie tych wzorców:</p>
+        
+        <div class="skin-preview">
+            <div class="skin-item">
+                <div class="skin-placeholder classic">🍅</div>
+                <div>Classic<br><small>Czerwony #E4002B</small></div>
+            </div>
+            <div class="skin-item">
+                <div class="skin-placeholder golden">👑</div>
+                <div>Golden<br><small>Złoty #FFD700</small></div>
+            </div>
+            <div class="skin-item">
+                <div class="skin-placeholder halloween">🎃</div>
+                <div>Halloween<br><small>Pomarańczowy #FF4500</small></div>
+            </div>
+            <div class="skin-item">
+                <div class="skin-placeholder futuristic">🔮</div>
+                <div>Futuristic<br><small>Srebrny #C0C0C0</small></div>
+            </div>
+            <div class="skin-item">
+                <div class="skin-placeholder rainbow">🌈</div>
+                <div>Rainbow<br><small>Gradient tęczowy</small></div>
+            </div>
+        </div>
+
+        <h2>🚀 Szybki Start</h2>
+        <div class="step">
+            <strong>Krok 1:</strong> Pobierz plik <code>heinz_ketchup_empire.html</code>
+        </div>
+        <div class="step">
+            <strong>Krok 2:</strong> Otwórz plik w przeglądarce - gra już działa!
+        </div>
+        <div class="step">
+            <strong>Krok 3 (opcjonalny):</strong> Dodaj obrazy skinów w folderze <code>skins/</code>
+        </div>
+        <div class="step">
+            <strong>Krok 4 (opcjonalny):</strong> Dodaj pliki audio w folderze <code>sounds/</code>
+        </div>
+
+        <h2>🖼️ Tworzenie Obrazów Skinów</h2>
+        <div class="step">
+            <strong>Wymagania:</strong>
+            <ul>
+                <li>Format: PNG z przezroczystym tłem</li>
+                <li>Rozmiar: 200x200 pikseli</li>
+                <li>Kształt: Okrągły (gra automatycznie zastosuje border-radius: 50%)</li>
+                <li>Motyw: Butelka ketchupu w różnych stylach</li>
+            </ul>
+        </div>
+
+        <h2>🔊 Pliki Dźwiękowe</h2>
+        <div class="step">
+            <strong>Sugerowane dźwięki:</strong>
+            <ul>
+                <li><strong>squish.mp3:</strong> Miękki, satysfakcjonujący dźwięk "squish" dla kliknięć</li>
+                <li><strong>upgrade.mp3:</strong> Pozytywny dźwięk "ding" lub "chime" dla ulepszeń</li>
+                <li><strong>victory.mp3:</strong> Fanfary lub triumfujący dźwięk dla osiągnięć</li>
+                <li><strong>rebirth.mp3:</strong> Epicki, kosmiczny dźwięk dla odrodzenia</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Ważne:</strong> Pliki audio i obrazy są opcjonalne. Gra ma wbudowane fallbacki i będzie działać bez problemów nawet bez tych plików. Braki plików nie spowodują błędów!
+        </div>
+
+        <h2>🎮 Funkcje Gry</h2>
+        <div class="step">
+            <ul>
+                <li><strong>🖱️ Dopaminowe klikanie:</strong> Animacje, cząsteczki, efekty</li>
+                <li><strong>⚡ 7 typów ulepszeń:</strong> Od prostego klikania do globalnej dominacji</li>
+                <li><strong>🎨 5 odblokowywalnych skinów:</strong> Każdy z unikalnym stylem</li>
+                <li><strong>🔄 System odrodzenia:</strong> Resetuj za permanentne bonusy</li>
+                <li><strong>🏆 7 osiągnięć:</strong> Z nagrodami i confetti</li>
+                <li><strong>🌍 Dwujęzyczność:</strong> Polski i angielski</li>
+                <li><strong>📱 Pełne wsparcie mobile:</strong> Responsywny design</li>
+                <li><strong>💾 Automatyczny zapis:</strong> Twój postęp jest bezpieczny</li>
+            </ul>
+        </div>
+
+        <a href="heinz_ketchup_empire.html" class="download-button">
+            🚀 URUCHOM GRĘ TERAZ!
+        </a>
+
+        <div class="success">
+            <strong>🎉 Gotowe!</strong> Twoja gra Heinz Ketchup Empire jest gotowa do zabawy. Kliknij przycisk powyżej i zacznij budować swoje imperium ketchupu!
+        </div>
+
+        <h2>🔧 Rozwiązywanie Problemów</h2>
+        <div class="step">
+            <strong>Problem:</strong> Nie widzę obrazów butelek<br>
+            <strong>Rozwiązanie:</strong> Sprawdź czy folder <code>skins/</code> istnieje i zawiera pliki PNG o odpowiednich nazwach
+        </div>
+        <div class="step">
+            <strong>Problem:</strong> Nie słyszę dźwięków<br>
+            <strong>Rozwiązanie:</strong> Sprawdź czy folder <code>sounds/</code> istnieje, zawiera pliki MP3 i czy przeglądarka ma włączony dźwięk
+        </div>
+        <div class="step">
+            <strong>Problem:</strong> Gra nie zapisuje postępu<br>
+            <strong>Rozwiązanie:</strong> Sprawdź czy przeglądarka ma włączone localStorage (większość przeglądarek ma to domyślnie)
+        </div>
+
+        <footer style="text-align: center; margin-top: 40px; color: #888;">
+            <p>Stworzone przez <strong>MiniMax Agent</strong> 🤖</p>
+            <p>Wersja 1.0 - 2025</p>
+        </footer>
+    </div>
+</body>
+</html>
