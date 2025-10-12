@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+
+Autor: MiniMax Agent | Wersja: 1.0 | 2025
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heinz Ketchup Empire - Ultimate Clicker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #E4002B;
+            --light-red: #FF6B6B;
+            --gold: #FFD700;
+            --dark-bg: #1a0e0e;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #ffffff;
+            --text-secondary: #cccccc;
+            --shadow-glow: 0 8px 32px rgba(228, 0, 43, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1414 50%, #1a0e0e 100%);
+            min-height: 100vh;
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(228, 0, 43, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(228, 0, 43, 0.05) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-glow);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-red), var(--light-red), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(228, 0, 43, 0.5);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(228, 0, 43, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 107, 107, 0.8)); }
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 8px 16px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .language-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Main Game Area */
+        .game-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--light-red);
+            display: block;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Main Clicker Area */
+        .clicker-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .bottle-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .bottle {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 
+                0 0 50px rgba(228, 0, 43, 0.6),
+                inset 0 0 50px rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+            filter: drop-shadow(0 0 30px rgba(228, 0, 43, 0.5));
+            background: linear-gradient(45deg, var(--primary-red), var(--light-red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bottle.has-image {
+            background: none;
+            font-size: 0;
+        }
+
+        .bottle:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 80px rgba(228, 0, 43, 0.8),
+                inset 0 0 50px rgba(255, 255, 255, 0.2);
+        }
+
+        .bottle:active {
+            transform: scale(0.95);
+            box-shadow: 
+                0 0 100px rgba(255, 107, 107, 1),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .bottle.clicked {
+            animation: bottleClick 0.2s ease;
+        }
+
+        @keyframes bottleClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9) rotate(2deg); }
+            100% { transform: scale(1.1) rotate(-1deg); }
+        }
+
+        /* Click Effect */
+        .click-effect {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--light-red);
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+            animation: floatUp 1s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        /* Particle System */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--light-red);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleExplosion 0.8s ease-out forwards;
+        }
+
+        @keyframes particleExplosion {
+            0% {
+                opacity: 1;
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translate(var(--dx), var(--dy));
+            }
+        }
+
+        /* Upgrades Panel */
+        .upgrades-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Leaderboard Panel */
+        .leaderboard-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard-table th {
+            background: rgba(228, 0, 43, 0.2);
+            color: var(--light-red);
+            font-weight: 600;
+        }
+
+        .leaderboard-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .leaderboard-table tr.current-player {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 3px solid var(--gold);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .tab-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tab-button.active {
+            background: var(--primary-red);
+            color: white;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-score-btn {
+            background: linear-gradient(45deg, var(--gold), #FFA500);
+            border: none;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-score-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .player-name-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .player-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .upgrade-item {
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upgrade-item:hover {
+            border-left-color: var(--light-red);
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .upgrade-item.affordable {
+            border-left-color: var(--gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .upgrade-item.affordable:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateX(5px);
+        }
+
+        .upgrade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .upgrade-name {
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .upgrade-cost {
+            color: var(--gold);
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .upgrade-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .upgrade-level {
+            font-size: 0.8rem;
+            color: var(--light-red);
+            font-weight: 600;
+        }
+
+        /* Achievement System */
+        .achievement-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, var(--gold), #FFA500);
+            color: #000;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            transform: translateX(400px);
+            transition: all 0.5s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .achievement-popup.show {
+            transform: translateX(0);
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.9rem;
+        }
+
+        /* Rebirth System */
+        .rebirth-panel {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .rebirth-button {
+            background: linear-gradient(45deg, #8A2BE2, #4B0082);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .rebirth-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.8);
+        }
+
+        .rebirth-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Skin Selector */
+        .skin-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .skin-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            object-fit: cover;
+        }
+
+        .skin-option:hover {
+            border-color: var(--light-red);
+            transform: scale(1.1);
+        }
+
+        .skin-option.selected {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .skin-option.locked {
+            filter: grayscale(100%) brightness(0.5);
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .game-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .bottle {
+                width: 200px;
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 10px;
+                gap: 15px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .bottle {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .language-toggle {
+                position: relative;
+                margin: 10px auto;
+            }
+        }
+
+        /* Special Effects */
+        .screen-shake {
+            animation: screenShake 0.5s ease-in-out;
+        }
+
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0); }
+            25% { transform: translate(-5px, 5px); }
+            50% { transform: translate(5px, -5px); }
+            75% { transform: translate(-3px, 3px); }
+        }
+
+        .rainbow-text {
+            background: linear-gradient(45deg, #ff0000, #ff8c00, #ffd700, #00ff00, #0000ff, #8b00ff);
+            background-size: 600% 600%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbowAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes rainbowAnimation {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-bottle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-red), var(--light-red));
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-bottle"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1 class="title" id="gameTitle">Heinz Ketchup Empire</h1>
+        <button class="language-toggle" id="languageToggle">🌍 EN</button>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container">
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="glass-panel stat-item">
+                <span class="stat-value" id="totalDrops">0</span>
+                <div class="stat-label" id="dropsLabel">Ketchup Drops</div>
+            </div>
+            <div class="glass-panel stat-item">
+                <span class="stat-value" id="dropsPerSecond">0</span>
+                <div class="stat-label" id="dpsLabel">Drops per Second</div>
+            </div>
+            <div class="glass-panel stat-item">
+                <span class="stat-value" id="totalClicks">0</span>
+                <div class="stat-label" id="clicksLabel">Total Clicks</div>
+            </div>
+            <div class="glass-panel stat-item">
+                <span class="stat-value" id="rebirthCount">0</span>
+                <div class="stat-label" id="rebirthLabel">Rebirths</div>
+            </div>
+            <div class="glass-panel stat-item">
+                <span class="stat-value" id="soulPoints">0</span>
+                <div class="stat-label" id="soulLabel">Soul Points</div>
+            </div>
+        </div>
+
+        <!-- Main Clicker Area -->
+        <div class="clicker-area glass-panel">
+            <div class="bottle-container">
+                <img class="bottle" id="bottle" src="skins/classic.png" alt="Heinz Ketchup Bottle">
+            </div>
+            
+            <!-- Skin Selector -->
+            <div class="skin-selector" id="skinSelector">
+                <!-- Dynamically populated -->
+            </div>
+
+            <!-- Rebirth Panel -->
+            <div class="rebirth-panel">
+                <button class="rebirth-button" id="rebirthButton" disabled>
+                    <span id="rebirthText">Rebirth (1e12 drops required)</span>
+                </button>
+                <div id="rebirthInfo" style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Upgrades & Leaderboard -->
+        <div class="upgrades-panel">
+            <div class="glass-panel" style="text-align: center; margin-bottom: 10px;">
+                <div class="tab-buttons">
+                    <button class="tab-button active" id="upgradesTab">
+                        <span id="upgradesTitle">Upgrades</span>
+                    </button>
+                    <button class="tab-button" id="leaderboardTab">
+                        <span id="leaderboardTitle">Leaderboard</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Upgrades Container -->
+            <div id="upgradesContainer">
+                <!-- Dynamically populated -->
+            </div>
+            
+            <!-- Leaderboard Container -->
+            <div id="leaderboardContainer" style="display: none;">
+                <div class="glass-panel">
+                    <div class="tab-buttons" id="leaderboardCategoryTabs">
+                        <button class="tab-button active" data-category="totalDrops" id="totalDropsTab">Drops</button>
+                        <button class="tab-button" data-category="rebirths" id="rebirthsTab">Rebirths</button>
+                        <button class="tab-button" data-category="maxDps" id="maxDpsTab">DPS</button>
+                        <button class="tab-button" data-category="playtime" id="playtimeTab">Time</button>
+                    </div>
+                    
+                    <div id="leaderboardContent">
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th id="rankHeader">Rank</th>
+                                    <th id="playerHeader">Player</th>
+                                    <th id="scoreHeader">Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardBody">
+                                <!-- Dynamically populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="achievement-title" id="achievementTitle">Achievement Unlocked!</div>
+        <div class="achievement-desc" id="achievementDesc">Description</div>
+    </div>
+
+    <!-- Rebirth Modal -->
+    <div class="modal" id="rebirthModal">
+        <div class="modal-content">
+            <h2 id="rebirthModalTitle">Rebirth Confirmation</h2>
+            <p id="rebirthModalDesc">This will reset all your progress but grant permanent bonuses!</p>
+            <div style="margin: 20px 0;">
+                <div id="rebirthBonusInfo"></div>
+            </div>
+            <button class="rebirth-button" id="confirmRebirth" style="margin: 10px;">Confirm Rebirth</button>
+            <button class="rebirth-button" id="cancelRebirth" style="background: #666; margin: 10px;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Player Name Input Modal -->
+    <div class="modal" id="playerNameModal">
+        <div class="modal-content">
+            <h2 id="playerNameModalTitle">Enter Your Nickname</h2>
+            <p id="playerNameModalDesc">This name will be used for the leaderboard. You can only set it once!</p>
+            <input type="text" class="player-name-input" id="initialPlayerNameInput" placeholder="Your Nickname...">
+            <button class="submit-score-btn" id="savePlayerNameBtn" style="margin-top: 20px;">Save Nickname</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="clickSound" preload="auto">
+        <source src="sounds/squish.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="upgradeSound" preload="auto">
+        <source src="sounds/upgrade.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="achievementSound" preload="auto">
+        <source src="sounds/victory.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rebirthSound" preload="auto">
+        <source src="sounds/rebirth.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Game State
+        let gameState = {
+            drops: 0,
+            totalClicks: 0,
+            dropsPerSecond: 0,
+            rebirthCount: 0,
+            soulPoints: 0,
+            currentSkin: 'classic',
+            language: 'en',
+            clickPower: 1,
+            upgrades: {},
+            achievements: {},
+            lastSave: Date.now(),
+            playerName: '',
+            playerNameSet: false, // New flag to track if name has been set
+            totalLifetimeDrops: 0,
+            maxDpsReached: 0,
+            playTime: 0,
+            startTime: Date.now(),
+            lastClickTime: Date.now()
+        };
+
+        // Language System
+        const translations = {
+            en: {
+                gameTitle: "Heinz Ketchup Empire",
+                dropsLabel: "Ketchup Drops",
+                dpsLabel: "Drops per Second", 
+                clicksLabel: "Total Clicks",
+                rebirthLabel: "Rebirths",
+                soulLabel: "Soul Points",
+                upgradesTitle: "Upgrades",
+                leaderboardTitle: "Leaderboard",
+                rebirthText: "Rebirth (1e12 drops required)",
+                rebirthModalTitle: "Rebirth Confirmation",
+                rebirthModalDesc: "This will reset all your progress but grant permanent bonuses!",
+                confirmRebirth: "Confirm Rebirth",
+                cancel: "Cancel",
+                achievementUnlocked: "Achievement Unlocked!",
+                enterName: "Enter your name...",
+                namePrompt: "Enter your player name for the leaderboard:",
+                leaderboardEmpty: "No records yet. Be the first!",
+                rank: "Rank",
+                player: "Player",
+                score: "Score",
+                category: "Category",
+                totalDrops: "Total Drops",
+                maxDps: "Max DPS",
+                rebirths: "Rebirths",
+                playtime: "Play Time",
+                submitScore: "Submit to Leaderboard",
+                nicknameModalTitle: "Enter Your Nickname",
+                nicknameModalDesc: "This name will be used for the leaderboard. You can only set it once!",
+                saveNickname: "Save Nickname",
+                // Upgrades
+                clickPowerName: "Click Power",
+                clickPowerDesc: "Increases clicks by +1 drop",
+                autoClickerName: "Factory Workers",
+                autoClickerDesc: "Generates +1 drop per second",
+                biggerBottleName: "Bigger Bottle",
+                biggerBottleDesc: "Multiplies click power by 1.2x", // Nerfed from 2x
+                sauceHelpersName: "Sauce Helpers",
+                sauceHelpersDesc: "Generates +5 drops per second",
+                factoryName: "Ketchup Factory",
+                factoryDesc: "Generates +25 drops per second",
+                globalDominationName: "Global Domination",
+                globalDominationDesc: "Multiplies ALL production by 1.5x",
+                megaFactoryName: "Mega Factory",
+                megaFactoryDesc: "Generates +100 drops per second",
+                // Achievements
+                firstDropTitle: "First Drop",
+                firstDropDesc: "Click the bottle for the first time",
+                hundredDropsTitle: "Getting Started",
+                hundredDropsDesc: "Collect 100 ketchup drops",
+                thousandDropsTitle: "Ketchup Addict",
+                thousandDropsDesc: "Collect 1,000 ketchup drops",
+                firstUpgradeTitle: "First Upgrade",
+                firstUpgradeDesc: "Purchase your first upgrade",
+                clickMasterTitle: "Click Master",
+                clickMasterDesc: "Click 100 times",
+                millionDropsTitle: "Millionaire",
+                millionDropsDesc: "Collect 1,000,000 drops",
+                firstRebirthTitle: "Reborn",
+                firstRebirthDesc: "Complete your first rebirth"
+            },
+            pl: {
+                gameTitle: "Imperium Ketchupu Heinz",
+                dropsLabel: "Krople Ketchupu",
+                dpsLabel: "Kropli na Sekundę",
+                clicksLabel: "Całkowite Kliknięcia",
+                rebirthLabel: "Odrodzenia",
+                soulLabel: "Punkty Duszy",
+                upgradesTitle: "Ulepszenia",
+                leaderboardTitle: "Ranking",
+                rebirthText: "Odrodzenie (wymagane 1e12 kropli)",
+                rebirthModalTitle: "Potwierdzenie Odrodzenia",
+                rebirthModalDesc: "To zresetuje cały postęp, ale da stałe bonusy!",
+                confirmRebirth: "Potwierdź Odrodzenie",
+                cancel: "Anuluj",
+                achievementUnlocked: "Osiągnięcie Odblokowane!",
+                enterName: "Wpisz swoje imię...",
+                namePrompt: "Wpisz swoją nazwę gracza do rankingu:",
+                leaderboardEmpty: "Brak rekordów. Bądź pierwszy!",
+                rank: "Miejsce",
+                player: "Gracz",
+                score: "Wynik",
+                category: "Kategoria",
+                totalDrops: "Suma Kropli",
+                maxDps: "Najwyższe DPS",
+                rebirths: "Odrodzenia",
+                playtime: "Czas Gry",
+                submitScore: "Dodaj do Rankingu",
+                nicknameModalTitle: "Wprowadź swój Nick",
+                nicknameModalDesc: "Ta nazwa będzie używana w rankingu. Możesz ją ustawić tylko raz!",
+                saveNickname: "Zapisz Nick",
+                // Upgrades
+                clickPowerName: "Moc Kliknięcia",
+                clickPowerDesc: "Zwiększa kliknięcia o +1 kroplę",
+                autoClickerName: "Robotnicy Fabryki",
+                autoClickerDesc: "Generuje +1 kroplę na sekundę",
+                biggerBottleName: "Większa Butelka",
+                biggerBottleDesc: "Mnoży moc kliknięcia przez 1.2x", // Nerfed from 2x
+                sauceHelpersName: "Pomocnicy Sosu",
+                sauceHelpersDesc: "Generuje +5 kropli na sekundę",
+                factoryName: "Fabryka Ketchupu",
+                factoryDesc: "Generuje +25 kropli na sekundę",
+                globalDominationName: "Globalna Dominacja",
+                globalDominationDesc: "Mnoży CAŁĄ produkcję o 1.5x",
+                megaFactoryName: "Mega Fabryka",
+                megaFactoryDesc: "Generuje +100 kropli na sekundę",
+                // Achievements
+                firstDropTitle: "Pierwsza Kropla",
+                firstDropDesc: "Kliknij butelkę po raz pierwszy",
+                hundredDropsTitle: "Zaczynamy",
+                hundredDropsDesc: "Zbierz 100 kropli ketchupu",
+                thousandDropsTitle: "Uzależniony od Ketchupu",
+                thousandDropsDesc: "Zbierz 1,000 kropli ketchupu",
+                firstUpgradeTitle: "Pierwsze Ulepszenie",
+                firstUpgradeDesc: "Kup swoje pierwsze ulepszenie",
+                clickMasterTitle: "Mistrz Kliknięć",
+                clickMasterDesc: "Kliknij 100 razy",
+                millionDropsTitle: "Milioner",
+                millionDropsDesc: "Zbierz 1,000,000 kropli",
+                firstRebirthTitle: "Odrodzony",
+                firstRebirthDesc: "Ukończ swoje pierwsze odrodzenie"
+            }
+        };
+
+        // Upgrade Definitions
+        const upgradeDefinitions = {
+            clickPower: {
+                baseCost: 10,
+                costMultiplier: 1.15,
+                effect: (level) => level * 1,
+                type: 'click'
+            },
+            autoClicker: {
+                baseCost: 100,
+                costMultiplier: 1.1,
+                effect: (level) => level * 1,
+                type: 'dps'
+            },
+            biggerBottle: {
+                baseCost: 500,
+                costMultiplier: 1.2,
+                effect: (level) => 1 + (level * 0.2), // Nerfed: 1.2x per level instead of 2x total
+                type: 'clickMultiplier'
+            },
+            sauceHelpers: {
+                baseCost: 1000,
+                costMultiplier: 1.1,
+                effect: (level) => level * 5,
+                type: 'dps'
+            },
+            factory: {
+                baseCost: 10000,
+                costMultiplier: 1.1,
+                effect: (level) => level * 25,
+                type: 'dps'
+            },
+            globalDomination: {
+                baseCost: 100000,
+                costMultiplier: 4.0,
+                effect: (level) => Math.pow(1.5, level), // Nerfed from 3x total to 1.5x per level
+                type: 'globalMultiplier'
+            },
+            megaFactory: {
+                baseCost: 10000000,
+                costMultiplier: 3.5,
+                effect: (level) => level * 100,
+                type: 'dps'
+            }
+        };
+
+        // Achievement Definitions
+        const achievementDefinitions = {
+            firstDrop: {
+                condition: () => gameState.totalClicks >= 1,
+                reward: () => { gameState.clickPower += 0.5; }
+            },
+            hundredDrops: {
+                condition: () => gameState.drops >= 100,
+                reward: () => { gameState.clickPower += 1; }
+            },
+            thousandDrops: {
+                condition: () => gameState.drops >= 1000,
+                reward: () => { gameState.clickPower *= 1.5; }
+            },
+            firstUpgrade: {
+                condition: () => Object.values(gameState.upgrades).some(level => level > 0),
+                reward: () => { gameState.drops += 500; }
+            },
+            clickMaster: {
+                condition: () => gameState.totalClicks >= 100,
+                reward: () => { gameState.clickPower += 2; }
+            },
+            millionDrops: {
+                condition: () => gameState.drops >= 1000000,
+                reward: () => { gameState.clickPower *= 2; }
+            },
+            firstRebirth: {
+                condition: () => gameState.rebirthCount >= 1,
+                reward: () => { gameState.clickPower *= 3; }
+            }
+        };
+
+        // Skin Definitions
+        const skinDefinitions = {
+            classic: { unlocked: true, cost: 0, name: "Classic Red", emoji: "🍅", color: "linear-gradient(45deg, #E4002B, #FF6B6B)" },
+            golden: { unlocked: true, cost: 0, name: "Golden Edition", emoji: "👑", color: "linear-gradient(45deg, #FFD700, #FFA500)" },
+            halloween: { unlocked: true, cost: 0, name: "Halloween Special", emoji: "🎃", color: "linear-gradient(45deg, #FF4500, #8B0000)" },
+            futuristic: { unlocked: true, cost: 0, name: "Futuristic Chrome", emoji: "🔮", color: "linear-gradient(45deg, #C0C0C0, #4169E1)" },
+            rainbow: { unlocked: true, cost: 0, name: "Rainbow Deluxe", emoji: "🌈", color: "linear-gradient(45deg, #ff0000, #ff8c00, #ffd700, #00ff00, #0000ff, #8b00ff)" }
+        };
+
+        // DOM Elements
+        const elements = {
+            bottle: document.getElementById('bottle'),
+            totalDrops: document.getElementById('totalDrops'),
+            dropsPerSecond: document.getElementById('dropsPerSecond'),
+            totalClicks: document.getElementById('totalClicks'),
+            rebirthCount: document.getElementById('rebirthCount'),
+            soulPoints: document.getElementById('soulPoints'),
+            rebirthButton: document.getElementById('rebirthButton'),
+            upgradesContainer: document.getElementById('upgradesContainer'),
+            leaderboardContainer: document.getElementById('leaderboardContainer'),
+            skinSelector: document.getElementById('skinSelector'),
+            languageToggle: document.getElementById('languageToggle'),
+            achievementPopup: document.getElementById('achievementPopup'),
+            loadingScreen: document.getElementById('loadingScreen'),
+            upgradesTab: document.getElementById('upgradesTab'),
+            leaderboardTab: document.getElementById('leaderboardTab'),
+            leaderboardBody: document.getElementById('leaderboardBody'),
+            playerNameModal: document.getElementById('playerNameModal'),
+            initialPlayerNameInput: document.getElementById('initialPlayerNameInput'),
+            savePlayerNameBtn: document.getElementById('savePlayerNameBtn')
+        };
+
+        // Utility Functions
+        function formatNumber(num) {
+            if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+            return Math.floor(num).toLocaleString();
+        }
+
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(() => {}); // Ignore errors for missing audio files
+            }
+        }
+
+        function createParticleEffect(x, y) {
+            const particleCount = 6;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                const angle = (i / particleCount) * Math.PI * 2;
+                const distance = 50 + Math.random() * 50;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--dx', dx + 'px');
+                particle.style.setProperty('--dy', dy + 'px');
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 800);
+            }
+        }
+
+        function createClickEffect(x, y, value, timeSinceLastClick = 500) {
+            const effect = document.createElement("div");
+            effect.className = "click-effect";
+            effect.textContent = "+" + formatNumber(value);
+            effect.style.left = x + "px";
+            effect.style.top = y + "px";
+
+            // Adjust color and size based on click speed
+            let color = "#FF6B6B"; // Default light red
+            let fontSize = 2; // Default font size in rem
+
+            if (timeSinceLastClick < 100) { // Very fast click
+                color = "#FFD700"; // Gold
+                fontSize = 3.5;
+            } else if (timeSinceLastClick < 200) { // Fast click
+                color = "#00FF00"; // Green
+                fontSize = 3;
+            } else if (timeSinceLastClick < 300) { // Medium click
+                color = "#00FFFF"; // Cyan
+                fontSize = 2.5;
+            }
+
+            effect.style.color = color;
+            effect.style.fontSize = fontSize + "rem";
+            
+            document.body.appendChild(effect);
+            setTimeout(() => effect.remove(), 1000);
+        }
+
+        function shakeScreen() {
+            document.body.classList.add('screen-shake');
+            setTimeout(() => document.body.classList.remove('screen-shake'), 500);
+        }
+
+        function formatTime(seconds) {
+            if (seconds < 60) return `${Math.floor(seconds)}s`;
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+            return `${Math.floor(seconds / 86400)}d`;
+        }
+
+        // Leaderboard System
+        let currentLeaderboardCategory = 'totalDrops';
+        let leaderboardData = {
+            totalDrops: [],
+            rebirths: [],
+            maxDps: [],
+            playtime: []
+        };
+
+        function loadLeaderboard() {
+            const saved = localStorage.getItem('heinzKetchupLeaderboard');
+            if (saved) {
+                try {
+                    leaderboardData = { ...leaderboardData, ...JSON.parse(saved) };
+                } catch (e) {
+                    console.log('Failed to load leaderboard');
+                }
+            }
+        }
+
+        function saveLeaderboard() {
+            localStorage.setItem('heinzKetchupLeaderboard', JSON.stringify(leaderboardData));
+        }
+
+        function submitScoreToLeaderboard() {
+            if (!gameState.playerNameSet || !gameState.playerName) {
+                return; // Don't submit if player name is not set
+            }
+
+            const playerName = gameState.playerName;
+            
+            // Aktualizuj statystyki
+            const currentTime = Date.now();
+            gameState.playTime = Math.floor((currentTime - gameState.startTime) / 1000);
+            gameState.totalLifetimeDrops = Math.max(gameState.totalLifetimeDrops, gameState.drops);
+            gameState.maxDpsReached = Math.max(gameState.maxDpsReached, gameState.dropsPerSecond);
+            
+            const score = {
+                name: playerName,
+                totalDrops: gameState.totalLifetimeDrops,
+                rebirths: gameState.rebirthCount,
+                maxDps: gameState.maxDpsReached,
+                playtime: gameState.playTime,
+                timestamp: currentTime
+            };
+
+            // Remove existing score for this player in all categories to prevent duplicates
+            Object.keys(leaderboardData).forEach(category => {
+                leaderboardData[category] = leaderboardData[category].filter(entry => entry.name !== playerName);
+            });
+
+            // Dodaj do każdej kategorii
+            Object.keys(leaderboardData).forEach(category => {
+                leaderboardData[category].push({
+                    ...score,
+                    score: score[category]
+                });
+                
+                // Sortuj malejąco
+                leaderboardData[category].sort((a, b) => b.score - a.score);
+                
+                // Zachowaj tylko top 10
+                leaderboardData[category] = leaderboardData[category].slice(0, 10);
+            });
+
+            saveLeaderboard();
+            updateLeaderboardDisplay();
+        }
+
+        function updateLeaderboardDisplay() {
+            const tbody = elements.leaderboardBody;
+            const categoryData = leaderboardData[currentLeaderboardCategory] || [];
+            
+            tbody.innerHTML = '';
+            
+            if (categoryData.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: var(--text-secondary);">
+                            ${getCurrentTranslation('leaderboardEmpty')}
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            categoryData.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                const isCurrentPlayer = entry.name === gameState.playerName; // Check if it's the current player
+                
+                if (isCurrentPlayer) {
+                    row.classList.add('current-player');
+                }
+
+                let scoreDisplay = formatNumber(entry.score);
+                if (currentLeaderboardCategory === 'playtime') {
+                    scoreDisplay = formatTime(entry.score);
+                }
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.name}</td>
+                    <td>${scoreDisplay}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function switchLeaderboardCategory(category) {
+            currentLeaderboardCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('#leaderboardCategoryTabs .tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            
+            updateLeaderboardDisplay();
+        }
+
+        function switchMainTab(tab) {
+            if (tab === 'upgrades') {
+                elements.upgradesContainer.style.display = 'block';
+                elements.leaderboardContainer.style.display = 'none';
+                elements.upgradesTab.classList.add('active');
+                elements.leaderboardTab.classList.remove('active');
+            } else {
+                elements.upgradesContainer.style.display = 'none';
+                elements.leaderboardContainer.style.display = 'block';
+                elements.upgradesTab.classList.remove('active');
+                elements.leaderboardTab.classList.add('active');
+                updateLeaderboardDisplay();
+            }
+        }
+
+        // Game Logic
+        function calculateClickPower() {
+            let power = gameState.clickPower;
+            
+            // Click power upgrades
+            power += getUpgradeLevel('clickPower');
+            
+            // Bigger bottle multiplier
+            power *= getUpgradeEffect('biggerBottle');
+            
+            // Global domination multiplier
+            power *= getUpgradeEffect('globalDomination');
+            
+            // Soul points multiplier (1% per soul point)
+            power *= (1 + gameState.soulPoints * 0.01);
+            
+            return Math.max(1, Math.floor(power));
+        }
+
+        function calculateDPS() {
+            let dps = 0;
+            
+            // Auto-clicker
+            dps += getUpgradeEffect('autoClicker');
+            
+            // Sauce helpers
+            dps += getUpgradeEffect('sauceHelpers');
+            
+            // Factory
+            dps += getUpgradeEffect('factory');
+            
+            // Mega factory
+            dps += getUpgradeEffect('megaFactory');
+            
+            // Global domination multiplier
+            dps *= getUpgradeEffect('globalDomination');
+            
+            // Soul points multiplier
+            dps *= (1 + gameState.soulPoints * 0.01);
+            
+            return Math.max(0, dps);
+        }
+
+        function getUpgradeLevel(upgradeId) {
+            return gameState.upgrades[upgradeId] || 0;
+        }
+
+        function getUpgradeEffect(upgradeId) {
+            const level = getUpgradeLevel(upgradeId);
+            if (level === 0) return upgradeDefinitions[upgradeId].type === 'clickMultiplier' || upgradeDefinitions[upgradeId].type === 'globalMultiplier' ? 1 : 0;
+            return upgradeDefinitions[upgradeId].effect(level);
+        }
+
+        function getUpgradeCost(upgradeId) {
+            const level = getUpgradeLevel(upgradeId);
+            const def = upgradeDefinitions[upgradeId];
+            return Math.floor(def.baseCost * Math.pow(def.costMultiplier, level));
+        }
+
+        function canAffordUpgrade(upgradeId) {
+            return gameState.drops >= getUpgradeCost(upgradeId);
+        }
+
+        function buyUpgrade(upgradeId) {
+            if (!canAffordUpgrade(upgradeId)) return false;
+            
+            const cost = getUpgradeCost(upgradeId);
+            gameState.drops -= cost;
+            gameState.upgrades[upgradeId] = getUpgradeLevel(upgradeId) + 1;
+            
+            playSound('upgradeSound');
+            updateDisplay();
+            checkAchievements();
+            
+            return true;
+        }
+
+        function checkAchievements() {
+            Object.keys(achievementDefinitions).forEach(achievementId => {
+                if (!gameState.achievements[achievementId] && achievementDefinitions[achievementId].condition()) {
+                    gameState.achievements[achievementId] = true;
+                    achievementDefinitions[achievementId].reward();
+                    showAchievement(achievementId);
+                }
+            });
+        }
+
+        function showAchievement(achievementId) {
+            const popup = elements.achievementPopup;
+            const title = document.getElementById('achievementTitle');
+            const desc = document.getElementById('achievementDesc');
+            
+            title.textContent = getCurrentTranslation(achievementId + 'Title');
+            desc.textContent = getCurrentTranslation(achievementId + 'Desc');
+            
+            popup.classList.add('show');
+            playSound('achievementSound');
+            
+            setTimeout(() => popup.classList.remove('show'), 4000);
+        }
+
+        function canRebirth() {
+            return gameState.drops >= 1e12;
+        }
+
+        function performRebirth() {
+            if (!canRebirth()) return;
+            
+            // Calculate soul points gained
+            const newSoulPoints = Math.floor(Math.sqrt(gameState.drops / 1e12));
+            gameState.soulPoints += newSoulPoints;
+            gameState.rebirthCount++;
+            
+            // Reset progress
+            gameState.drops = 0;
+            gameState.totalClicks = 0;
+            gameState.dropsPerSecond = 0;
+            gameState.clickPower = 1;
+            gameState.upgrades = {};
+            
+            playSound('rebirthSound');
+            document.getElementById('rebirthModal').classList.remove('show');
+            updateDisplay();
+            checkAchievements();
+            saveGame();
+        }
+
+        function updateDisplay() {
+            elements.totalDrops.textContent = formatNumber(gameState.drops);
+            elements.dropsPerSecond.textContent = formatNumber(calculateDPS());
+            elements.totalClicks.textContent = formatNumber(gameState.totalClicks);
+            elements.rebirthCount.textContent = formatNumber(gameState.rebirthCount);
+            elements.soulPoints.textContent = formatNumber(gameState.soulPoints);
+
+            // Update upgrades display
+            elements.upgradesContainer.innerHTML = '';
+            Object.keys(upgradeDefinitions).forEach(upgradeId => {
+                const upgrade = upgradeDefinitions[upgradeId];
+                const level = getUpgradeLevel(upgradeId);
+                const cost = getUpgradeCost(upgradeId);
+                const affordable = canAffordUpgrade(upgradeId);
+
+                const upgradeItem = document.createElement('div');
+                upgradeItem.className = `glass-panel upgrade-item ${affordable ? 'affordable' : ''}`;
+                upgradeItem.onclick = () => buyUpgrade(upgradeId);
+                upgradeItem.innerHTML = `
+                    <div class="upgrade-header">
+                        <span class="upgrade-name">${getCurrentTranslation(upgradeId + 'Name')}</span>
+                        <span class="upgrade-cost">${formatNumber(cost)} 🍅</span>
+                    </div>
+                    <div class="upgrade-description">${getCurrentTranslation(upgradeId + 'Desc')}</div>
+                    <div class="upgrade-level">Level: ${level}</div>
+                `;
+                elements.upgradesContainer.appendChild(upgradeItem);
+            });
+
+            // Update rebirth button
+            const rebirthReq = 1e12;
+            if (canRebirth()) {
+                elements.rebirthButton.disabled = false;
+                document.getElementById('rebirthText').textContent = getCurrentTranslation('rebirthText').replace('(1e12 drops required)', '(Ready!)');
+                document.getElementById('rebirthInfo').textContent = `Gain ${Math.floor(Math.sqrt(gameState.drops / rebirthReq))} Soul Points`;
+            } else {
+                elements.rebirthButton.disabled = true;
+                document.getElementById('rebirthText').textContent = getCurrentTranslation('rebirthText').replace('(1e12 drops required)', `(${formatNumber(rebirthReq - gameState.drops)} more drops)`);
+                document.getElementById('rebirthInfo').textContent = '';
+            }
+
+            // Update skin selector
+            updateSkinSelector();
+        }
+
+        function updateSkinSelector() {
+            const container = elements.skinSelector;
+            container.innerHTML = '';
+
+            Object.keys(skinDefinitions).forEach(skinId => {
+                const skin = skinDefinitions[skinId];
+                const unlocked = skin.unlocked || gameState.drops >= skin.cost; // Skins can be unlocked by drops
+
+                const skinWrapper = document.createElement('div');
+                skinWrapper.className = `skin-option ${skinId === gameState.currentSkin ? 'selected' : ''} ${!unlocked ? 'locked' : ''}`;
+                
+                // Try to load image, fallback to emoji + gradient
+                const img = new Image();
+                img.onload = () => {
+                    skinWrapper.style.backgroundImage = `url(skins/${skinId}.png)`;
+                    skinWrapper.style.backgroundSize = 'cover';
+                    skinWrapper.style.backgroundPosition = 'center';
+                    skinWrapper.textContent = '';
+                };
+                img.onerror = () => {
+                    skinWrapper.textContent = skin.emoji;
+                };
+                img.src = `skins/${skinId}.png`;
+                
+                skinWrapper.title = `${skin.name} ${!unlocked ? `(${formatNumber(skin.cost)} drops)` : ''}`;
+                
+                if (unlocked) {
+                    skinWrapper.onclick = () => changeSkin(skinId);
+                    skinWrapper.onmouseenter = () => {
+                        if (gameState.currentSkin !== skinId) {
+                            skinWrapper.style.borderColor = '#FF6B6B';
+                            skinWrapper.style.transform = 'scale(1.1)';
+                        }
+                    };
+                    skinWrapper.onmouseleave = () => {
+                        if (gameState.currentSkin !== skinId) {
+                            skinWrapper.style.borderColor = 'transparent';
+                            skinWrapper.style.transform = 'scale(1)';
+                        }
+                    };
+                }
+                
+                container.appendChild(skinWrapper);
+            });
+        }
+
+        function changeSkin(skinId) {
+            gameState.currentSkin = skinId;
+            const skin = skinDefinitions[skinId];
+            
+            // Try to load image, fallback to emoji + gradient
+            const img = new Image();
+            img.onload = () => {
+                elements.bottle.src = `skins/${skinId}.png`;
+                elements.bottle.classList.add('has-image');
+                elements.bottle.textContent = '';
+                elements.bottle.style.background = 'none';
+            };
+            img.onerror = () => {
+                elements.bottle.classList.remove('has-image');
+                elements.bottle.textContent = skin.emoji;
+                elements.bottle.style.background = skin.color;
+                elements.bottle.removeAttribute('src');
+            };
+            img.src = `skins/${skinId}.png`;
+            
+            // Mark skin as unlocked
+            skinDefinitions[skinId].unlocked = true;
+            
+            // Pay for skin if needed
+            if (skinDefinitions[skinId].cost > 0 && gameState.drops >= skinDefinitions[skinId].cost) {
+                gameState.drops -= skinDefinitions[skinId].cost;
+                skinDefinitions[skinId].cost = 0; // Already bought
+            }
+            
+            updateDisplay();
+        }
+
+        function getCurrentTranslation(key) {
+            return translations[gameState.language][key] || translations.en[key] || key;
+        }
+
+        function updateLanguage() {
+            // Update all text elements
+            document.getElementById('gameTitle').textContent = getCurrentTranslation('gameTitle');
+            document.getElementById('dropsLabel').textContent = getCurrentTranslation('dropsLabel');
+            document.getElementById('dpsLabel').textContent = getCurrentTranslation('dpsLabel');
+            document.getElementById('clicksLabel').textContent = getCurrentTranslation('clicksLabel');
+            document.getElementById('rebirthLabel').textContent = getCurrentTranslation('rebirthLabel');
+            document.getElementById('soulLabel').textContent = getCurrentTranslation('soulLabel');
+            document.getElementById('upgradesTitle').textContent = getCurrentTranslation('upgradesTitle');
+            document.getElementById('leaderboardTitle').textContent = getCurrentTranslation('leaderboardTitle');
+            document.getElementById('rebirthModalTitle').textContent = getCurrentTranslation('rebirthModalTitle');
+            document.getElementById('rebirthModalDesc').textContent = getCurrentTranslation('rebirthModalDesc');
+            document.getElementById('confirmRebirth').textContent = getCurrentTranslation('confirmRebirth');
+            document.getElementById('cancelRebirth').textContent = getCurrentTranslation('cancel');
+            document.getElementById('rankHeader').textContent = getCurrentTranslation('rank');
+            document.getElementById('playerHeader').textContent = getCurrentTranslation('player');
+            document.getElementById('scoreHeader').textContent = getCurrentTranslation('score');
+            document.getElementById('playerNameModalTitle').textContent = getCurrentTranslation('nicknameModalTitle');
+            document.getElementById('playerNameModalDesc').textContent = getCurrentTranslation('nicknameModalDesc');
+            document.getElementById('savePlayerNameBtn').textContent = getCurrentTranslation('saveNickname');
+            
+            // Update language toggle
+            elements.languageToggle.textContent = `🌍 ${gameState.language.toUpperCase()}`;
+            
+            updateDisplay();
+            updateLeaderboardDisplay();
+        }
+
+        function toggleLanguage() {
+            gameState.language = gameState.language === 'en' ? 'pl' : 'en';
+            updateLanguage();
+            saveGame();
+        }
+
+        // Game Loop
+        function gameLoop() {
+            const now = Date.now();
+            const deltaTime = (now - gameState.lastSave) / 1000;
+            
+            if (deltaTime >= 1) {
+                gameState.drops += gameState.dropsPerSecond;
+                gameState.lastSave = now;
+                
+                // Update leaderboard stats
+                gameState.totalLifetimeDrops = Math.max(gameState.totalLifetimeDrops, gameState.drops);
+                gameState.maxDpsReached = Math.max(gameState.maxDpsReached, gameState.dropsPerSecond);
+                gameState.playTime = Math.floor((now - gameState.startTime) / 1000);
+                
+                updateDisplay();
+                checkAchievements();
+            }
+        }
+
+        // Save/Load System
+        function saveGame() {
+            localStorage.setItem('heinzKetchupEmpire', JSON.stringify(gameState));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('heinzKetchupEmpire');
+            if (saved) {
+                try {
+                    const loadedState = JSON.parse(saved);
+                    gameState = { ...gameState, ...loadedState };
+                } catch (e) {
+                    console.log('Failed to load save game');
+                }
+            }
+        }
+
+        // Event Listeners
+        elements.bottle.addEventListener('click', (e) => {
+            const clickPower = calculateClickPower();
+            gameState.drops += clickPower;
+            gameState.totalClicks++;
+            
+            // Visual effects
+            elements.bottle.classList.add('clicked');
+            setTimeout(() => elements.bottle.classList.remove('clicked'), 200);
+            
+            // Create particle effect
+            const rect = elements.bottle.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            createParticleEffect(x, y);
+            const currentTime = Date.now();
+            const timeSinceLastClick = currentTime - gameState.lastClickTime;
+            gameState.lastClickTime = currentTime;
+            createClickEffect(x - 50, y - 50, clickPower, timeSinceLastClick);
+            
+            // Random effects
+            if (Math.random() < 0.1) { // 10% chance for double drops
+                gameState.drops += clickPower;
+                createClickEffect(x + 30, y - 30, clickPower);
+            }
+            
+            playSound('clickSound');
+            updateDisplay();
+            checkAchievements();
+        });
+
+        elements.languageToggle.addEventListener('click', toggleLanguage);
+
+        elements.rebirthButton.addEventListener('click', () => {
+            if (canRebirth()) {
+                document.getElementById('rebirthModal').classList.add('show');
+                
+                const soulPointsGain = Math.floor(Math.sqrt(gameState.drops / 1e12));
+                document.getElementById('rebirthBonusInfo').innerHTML = `
+                    <strong>Soul Points Gained: ${soulPointsGain}</strong><br>
+                    <small>Each Soul Point gives +1% to all production</small>
+                `;
+            }
+        });
+
+        document.getElementById('confirmRebirth').addEventListener('click', performRebirth);
+        document.getElementById('cancelRebirth').addEventListener('click', () => {
+            document.getElementById('rebirthModal').classList.remove('show');
+        });
+
+        // Leaderboard Event Listeners
+        elements.upgradesTab.addEventListener('click', () => switchMainTab('upgrades'));
+        elements.leaderboardTab.addEventListener('click', () => switchMainTab('leaderboard'));
+
+        // Category tab listeners
+        document.querySelectorAll('#leaderboardCategoryTabs .tab-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchLeaderboardCategory(btn.dataset.category);
+            });
+        });
+
+        // Initial Player Name Input Logic
+        elements.savePlayerNameBtn.addEventListener('click', () => {
+            const name = elements.initialPlayerNameInput.value.trim();
+            if (name) {
+                gameState.playerName = name;
+                gameState.playerNameSet = true;
+                elements.playerNameModal.classList.remove("show");
+                saveGame();
+                submitScoreToLeaderboard(); // Automatically submit score after setting name
+            } else {
+                alert('Please enter a nickname!');
+            }
+        });
+
+        elements.initialPlayerNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                elements.savePlayerNameBtn.click();
+            }
+        });
+
+        // Random Events
+        function triggerRandomEvent() {
+            if (Math.random() < 0.2) { // 20% chance every minute
+                const events = [
+                    () => {
+                        const bonus = gameState.dropsPerSecond * 60;
+                        gameState.drops += bonus;
+                        createClickEffect(window.innerWidth / 2, 100, bonus);
+                        console.log('Ketchup Rain Event!');
+                    },
+                    () => {
+                        gameState.clickPower *= 2;
+                        setTimeout(() => gameState.clickPower /= 2, 30000);
+                        console.log('Double Click Power for 30 seconds!');
+                    }
+                ];
+                
+                const randomEvent = events[Math.floor(Math.random() * events.length)];
+                randomEvent();
+                updateDisplay();
+            }
+        }
+
+        // Initialize Game
+        function initGame() {
+            loadGame();
+            loadLeaderboard();
+            
+            // Initialize upgrades object if empty
+            if (!gameState.upgrades) gameState.upgrades = {};
+            if (!gameState.achievements) gameState.achievements = {};
+            
+            // Initialize new game state properties
+            if (!gameState.startTime) gameState.startTime = Date.now();
+            if (gameState.totalLifetimeDrops === undefined) gameState.totalLifetimeDrops = gameState.drops;
+            if (gameState.maxDpsReached === undefined) gameState.maxDpsReached = 0;
+            if (gameState.playTime === undefined) gameState.playTime = 0;
+            if (gameState.playerNameSet === undefined) gameState.playerNameSet = false;
+            
+            // Check if player name has been set
+            if (!gameState.playerNameSet) {
+                elements.playerNameModal.classList.add("show");
+            } else {
+                submitScoreToLeaderboard(); // Submit score once at start if name is already set
+            }
+            
+            // Set initial bottle skin with fallback
+            changeSkin(gameState.currentSkin);
+            
+            updateLanguage();
+            updateDisplay();
+            
+            // Set up game loop
+            setInterval(gameLoop, 100);
+            setInterval(saveGame, 5000); // Auto-save every 5 seconds
+            setInterval(submitScoreToLeaderboard, 15000); // Auto-submit and refresh leaderboard every 15 seconds
+            setInterval(triggerRandomEvent, 60000); // Random events every minute
+            
+            // Hide loading screen
+            setTimeout(() => {
+                elements.loadingScreen.classList.add('hidden');
+            }, 1000);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initGame);
+        
+        // Save on page unload
+        window.addEventListener('beforeunload', saveGame);
+    </script>
+</body>
+</html>
