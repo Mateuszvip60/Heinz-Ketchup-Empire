@@ -1,0 +1,57 @@
+/*
+ * → Developed by: @Mateuszvip60
+ * → Mapuje kluczowe elementy DOM gry.
+ */
+
+export const elements = {
+    bottle: document.getElementById("bottle"),
+    totalDrops: document.getElementById("totalDrops"),
+    dropsPerSecond: document.getElementById("dropsPerSecond"),
+    totalClicks: document.getElementById("totalClicks"),
+    rebirthCount: document.getElementById("rebirthCount"),
+    soulPoints: document.getElementById("soulPoints"),
+    rebirthButton: document.getElementById("rebirthButton"),
+    rebirthText: document.getElementById("rebirthText"),
+    rebirthInfo: document.getElementById("rebirthInfo"),
+    upgradesContainer: document.getElementById("upgradesContainer"),
+    leaderboardContainer: document.getElementById("leaderboardContainer"),
+    leaderboardBody: document.getElementById("leaderboardBody"),
+    leaderboardTabs: document.getElementById("leaderboardCategoryTabs"),
+    leaderboardStatus: document.getElementById("leaderboardStatus"),
+    onlineToggleBtn: document.getElementById("onlineToggleBtn"),
+    languageToggle: document.getElementById("languageToggle"),
+    achievementPopup: document.getElementById("achievementPopup"),
+    achievementTitle: document.getElementById("achievementTitle"),
+    achievementDesc: document.getElementById("achievementDesc"),
+    loadingScreen: document.getElementById("loadingScreen"),
+    upgradesTab: document.getElementById("upgradesTab"),
+    leaderboardTab: document.getElementById("leaderboardTab"),
+    skinSelector: document.getElementById("skinSelector"),
+    playerNameModal: document.getElementById("playerNameModal"),
+    initialPlayerNameInput: document.getElementById("initialPlayerNameInput"),
+    savePlayerNameBtn: document.getElementById("savePlayerNameBtn"),
+    submitScoreBtn: document.getElementById("submitScoreBtn"),
+    rebirthModal: document.getElementById("rebirthModal"),
+    rebirthModalTitle: document.getElementById("rebirthModalTitle"),
+    rebirthModalDesc: document.getElementById("rebirthModalDesc"),
+    rebirthBonusInfo: document.getElementById("rebirthBonusInfo"),
+    confirmRebirth: document.getElementById("confirmRebirth"),
+    cancelRebirth: document.getElementById("cancelRebirth"),
+    gameTitle: document.getElementById("gameTitle"),
+    dropsLabel: document.getElementById("dropsLabel"),
+    dpsLabel: document.getElementById("dpsLabel"),
+    clicksLabel: document.getElementById("clicksLabel"),
+    rebirthLabel: document.getElementById("rebirthLabel"),
+    soulLabel: document.getElementById("soulLabel"),
+    upgradesTitle: document.getElementById("upgradesTitle"),
+    leaderboardTitle: document.getElementById("leaderboardTitle"),
+    rankHeader: document.getElementById("rankHeader"),
+    playerHeader: document.getElementById("playerHeader"),
+    scoreHeader: document.getElementById("scoreHeader"),
+    audio: {
+        click: document.getElementById("clickSound"),
+        upgrade: document.getElementById("upgradeSound"),
+        achievement: document.getElementById("achievementSound"),
+        rebirth: document.getElementById("rebirthSound")
+    }
+};
